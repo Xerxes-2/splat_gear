@@ -83,7 +83,7 @@ fn search_solution(seed: u32, brand: Brand, target: Ability) -> Vec<Solution> {
                         });
                         break;
                     } else if count == &2 {
-                        let qual = if abilities[i + 1] == target {
+                        let qual = if abilities[i + 1] != target {
                             Quality::ABA
                         } else {
                             Quality::AA
