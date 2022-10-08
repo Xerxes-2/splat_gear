@@ -17,6 +17,6 @@ Quality: AA,    Cost: 1,        Drink:"None, None, None, None, SpecialCharge",  
 ```
 
 This means if keep no drinking for the next 4 rolls, and drink SPChargeUp during the 5th roll, you will get two SPChargeUp at the last two rolls. Notice that the sequence number starts from 0, so appear at 3 means AA starts from the 4th roll.
-So you should clear all the abilities before the 4th roll, **insert SPChargeUp with 10 frags in the second slot if you want to get AAA** and drink SPChargeUp during the 5th roll.
+So you should clear all the abilities before the 4th roll, **insert SPChargeUp with 10 frags in the first slot if you want to get AAA** and drink SPChargeUp during the 5th roll.
 
 Similarly, if the best you get is ABA, you should clear the gear before 1st A, and swap the B with 20 frags in the 2nd slot.
