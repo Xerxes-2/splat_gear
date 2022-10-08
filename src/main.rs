@@ -49,7 +49,7 @@ impl std::fmt::Display for Solution {
         } else {
             write!(
                 f,
-                "Drink nothing during, {:?} appears at {}",
+                "Drink nothing, {:?} appears at {}",
                 self.qual, self.appear
             )
         }
@@ -58,7 +58,7 @@ impl std::fmt::Display for Solution {
 
 fn search_solution(seed: u32, brand: Brand, target: Ability) -> Vec<Solution> {
     let mut ret = Vec::new();
-    for drink in 0..20 {
+    for drink in 0..14 {
         let drink = Ability::from(drink);
         for begin in 0..5 {
             for end in begin..6 {
@@ -68,9 +68,10 @@ fn search_solution(seed: u32, brand: Brand, target: Ability) -> Vec<Solution> {
                 let abilities = drink_during(seed, brand, Some(drink), begin, end);
                 let mut best: Option<Solution> = None;
                 for i in 0..3 {
-                    let count = &abilities[i..i + 2]
+                    let count = &abilities[i..i + 3]
                         .into_iter()
-                        .filter(|&&a| a == target)
+                        .filter(|&&a
+                            | a == target)
                         .count();
                     if count == &3 {
                         best = Some(Solution {
@@ -91,6 +92,7 @@ fn search_solution(seed: u32, brand: Brand, target: Ability) -> Vec<Solution> {
                             Some(ref mut best) => {
                                 if best.qual < qual {
                                     best.qual = qual;
+                                    best.appear = i;
                                 }
                             }
                             None => {
@@ -174,7 +176,7 @@ fn main() {
                 println!("{}", sol);
             }
         }
-        print!("\nContinue? (y/n)");
+        println!("\nContinue? (y/n)");
         input.clear();
         std::io::stdin().read_line(&mut input).unwrap();
         if input.trim() != "y" {
