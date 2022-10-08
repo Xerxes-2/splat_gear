@@ -41,7 +41,12 @@ fn search_solution(
             ret.push(sol);
         }
     }
-    ret.sort_by(|b, a| a.qual.cmp(&b.qual).then(b.cost.cmp(&a.cost)));
+    ret.sort_by(|b, a| {
+        a.qual
+            .cmp(&b.qual)
+            .then(b.cost.cmp(&a.cost))
+            .then(b.appear.cmp(&a.appear))
+    });
     ret
 }
 

@@ -2,7 +2,7 @@ pub struct Solution {
     drink: [Option<Ability>; 5],
     pub cost: usize,
     pub qual: Quality,
-    appear: usize,
+    pub appear: usize,
 }
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Clone, Copy)]
 pub enum Quality {
@@ -81,7 +81,11 @@ impl From<([Option<Ability>; PREDICT], [Ability; PREDICT], Ability)> for Solutio
                 } else {
                     if qual < Quality::AA {
                         qual = Quality::AA;
-                        appear = i;
+                        if abilities[i] == target {
+                            appear = i;
+                        } else {
+                            appear = i + 1;
+                        }
                     }
                 }
             }
