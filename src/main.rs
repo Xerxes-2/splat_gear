@@ -174,7 +174,7 @@ fn main() {
                 println!("{}", sol);
             }
         }
-        print!("Continue? (y/n)");
+        print!("\nContinue? (y/n)");
         input.clear();
         std::io::stdin().read_line(&mut input).unwrap();
         if input.trim() != "y" {
