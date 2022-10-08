@@ -1,5 +1,9 @@
 pub mod ability;
 pub mod brand;
+pub mod solution;
+
+pub const PREDICT: usize = 5;
+pub const ABILITY_SIZE: usize = 14;
 
 pub fn advance_seed(mut x: u32) -> u32 {
     x ^= x << 13;

@@ -1,118 +1,47 @@
+use itertools::iproduct;
 use splat_gear::ability::Ability;
 use splat_gear::brand::Brand;
 use splat_gear::get_ability;
+use splat_gear::solution::Quality;
+use splat_gear::solution::Solution;
+use splat_gear::ABILITY_SIZE;
+use splat_gear::PREDICT;
 
-fn drink_during(
-    mut seed: u32,
+const MAX_DISPLAY: usize = 20;
+
+fn search_solution(
+    original_seed: u32,
     brand: Brand,
-    drink: Option<Ability>,
-    begin: usize,
-    end: usize,
-) -> [Ability; 5] {
-    let mut ret = [Ability::MainSave; 5];
-    for i in 0..5 {
-        (seed, ret[i]) = if i >= begin && i < end {
-            get_ability(seed, brand, drink)
-        } else {
-            get_ability(seed, brand, None)
-        };
-    }
-    ret
-}
-
-#[derive(Debug, PartialEq, Eq, PartialOrd, Ord)]
-enum Quality {
-    ABA,
-    AA,
-    AAA,
-}
-struct Solution {
-    drink: Option<Ability>,
-    begin: usize,
-    end: usize,
-    qual: Quality,
-    appear: usize,
-}
-
-impl std::fmt::Display for Solution {
-    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-        if self.begin != self.end {
-            write!(
-                f,
-                "Drink {:?} during {}-{}, {:?} appears at {}",
-                self.drink.unwrap(),
-                self.begin,
-                self.end - 1,
-                self.qual,
-                self.appear
-            )
-        } else {
-            write!(
-                f,
-                "Drink nothing, {:?} appears at {}",
-                self.qual, self.appear
-            )
-        }
-    }
-}
-
-fn search_solution(seed: u32, brand: Brand, target: Ability) -> Vec<Solution> {
+    target: Ability,
+    standard: Quality,
+) -> Vec<Solution> {
     let mut ret = Vec::new();
-    for drink in 0..14 {
-        let drink = Ability::from(drink);
-        for begin in 0..5 {
-            for end in begin..6 {
-                if begin != 0 && end == begin {
-                    continue;
-                }
-                let abilities = drink_during(seed, brand, Some(drink), begin, end);
-                let mut best: Option<Solution> = None;
-                for i in 0..3 {
-                    let count = &abilities[i..i + 3]
-                        .into_iter()
-                        .filter(|&&a
-                            | a == target)
-                        .count();
-                    if count == &3 {
-                        best = Some(Solution {
-                            drink: Some(drink),
-                            begin,
-                            end,
-                            qual: Quality::AAA,
-                            appear: i,
-                        });
-                        break;
-                    } else if count == &2 {
-                        let qual = if abilities[i + 1] != target {
-                            Quality::ABA
-                        } else {
-                            Quality::AA
-                        };
-                        match best {
-                            Some(ref mut best) => {
-                                if best.qual < qual {
-                                    best.qual = qual;
-                                    best.appear = i;
-                                }
-                            }
-                            None => {
-                                best = Some(Solution {
-                                    drink: Some(drink),
-                                    begin,
-                                    end,
-                                    qual,
-                                    appear: i,
-                                });
-                            }
-                        }
-                    }
-                }
-                if best.is_some() {
-                    ret.push(best.unwrap());
-                }
-            }
+    let range = (0..ABILITY_SIZE + 1).map(|i| {
+        if i == 0 {
+            None
+        } else {
+            Some(Ability::from(i - 1))
+        }
+    });
+    for i in iproduct!(
+        range.clone(),
+        range.clone(),
+        range.clone(),
+        range.clone(),
+        range.clone()
+    ) {
+        let mut abilities: [Ability; PREDICT] = [Ability::MainSave; PREDICT];
+        let drinks: [Option<Ability>; PREDICT] = [i.0, i.1, i.2, i.3, i.4];
+        let mut seed = original_seed;
+        for j in 0..PREDICT {
+            (seed, abilities[j]) = get_ability(seed, brand, drinks[j]);
+        }
+        let sol = Solution::from((drinks, abilities, target));
+        if sol.qual >= standard {
+            ret.push(sol);
         }
     }
+    ret.sort_by(|b, a| a.qual.cmp(&b.qual).then(b.cost.cmp(&a.cost)));
     ret
 }
 
@@ -167,13 +96,22 @@ fn main() {
         );
         input.clear();
         std::io::stdin().read_line(&mut input).unwrap();
-        let target = Ability::from(input.trim().parse::<u32>().unwrap());
-        let sols = search_solution(seed, brand, target);
+        let target = Ability::from(input.trim().parse::<usize>().unwrap());
+        println!("Enter lowest standard quality: (ABA,AA,AAA)");
+        input.clear();
+        std::io::stdin().read_line(&mut input).unwrap();
+        let standard = Quality::from(input.trim().to_string());
+        let sols = search_solution(seed, brand, target, standard);
         if sols.len() == 0 {
             println!("No solution found");
         } else {
+            let mut count = 0;
             for sol in sols {
                 println!("{}", sol);
+                count += 1;
+                if count >= MAX_DISPLAY {
+                    break;
+                }
             }
         }
         println!("\nContinue? (y/n)");

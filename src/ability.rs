@@ -17,8 +17,8 @@ pub enum Ability {
 }
 
 use std::mem::transmute;
-impl From<u32> for Ability {
-    fn from(x: u32) -> Self {
+impl From<usize> for Ability {
+    fn from(x: usize) -> Self {
         unsafe { transmute((x % 14) as u8) }
     }
 }
