@@ -73,7 +73,7 @@ impl From<([Option<Ability>; PREDICT], [Ability; PREDICT], Ability)> for Solutio
                     appear: i,
                 };
             } else if count == &2 {
-                if abilities[i + 1] == target {
+                if abilities[i + 1] != target {
                     if qual == Quality::Bad {
                         qual = Quality::ABA;
                         appear = i;
