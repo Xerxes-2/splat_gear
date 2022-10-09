@@ -57,7 +57,7 @@ impl Brand {
     pub fn max_roll(&self, drink: Option<Ability>) -> u32 {
         match drink {
             Some(drink) => {
-                let prefer = PREFER[drink as usize];
+                let prefer = PREFER[*self as usize];
                 match prefer {
                     Some((common, uncommon)) => {
                         if drink == common {
