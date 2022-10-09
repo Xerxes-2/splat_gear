@@ -119,6 +119,7 @@ fn main() {
             println!("No solution found in 5 steps. 5步内无合适方案");
         } else {
             let mut count = 0;
+            println!("Quality 品质\tCost 饮料券消耗\tBegin 序列头\tDrinks 饮料顺序");
             for sol in sols {
                 println!("{}", sol);
                 count += 1;
