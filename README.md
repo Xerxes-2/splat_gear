@@ -6,9 +6,9 @@ A small Rust program to find the best solution for desired ability within next 5
 
 1. Calculate the current seed of your gear, in this link: <https://leanny.github.io/splat3seedchecker/#/seedrecover>. You may need many rolls to get the correct seed, but it's worth it.
 2. Run the program, input seed, brand, your target ability, and the base quality. Quality means the order of target ability, A stands for target, B stands for other ability. So AAA is best, AA is good, ABA is just common.
-3. The program will output the best solution within 5 rolls for you. The cost means how many drink tickets you need to get the solution. And the sequence means what drink should in effect when the roll happens. 'Appear at' means the ability ordering will starts at where in the sequence.
+3. The program will output the best solution within 5 rolls for you. The cost means how many drink tickets you need to get the solution. And the sequence means what drink should in effect when the roll happens. 'Appear at' means the ability ordering will start at where in the sequence.
 
-## Let's take a example
+## Let's take an example
 
 With seed 0x41215, brand 2, ability 5, quality AA, we will get this at the top of the output:
 
