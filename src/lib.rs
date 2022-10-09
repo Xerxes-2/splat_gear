@@ -2,7 +2,7 @@ pub mod ability;
 pub mod brand;
 pub mod solution;
 
-pub const PREDICT: usize = 7;
+pub const PREDICT: usize = 6;
 pub const ABILITY_SIZE: usize = 14;
 
 /// Advance the RNG by one step.

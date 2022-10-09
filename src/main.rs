@@ -1,4 +1,4 @@
-use itertools::iproduct;
+use itertools::Itertools;
 use splat_gear::ability::Ability;
 use splat_gear::brand::Brand;
 use splat_gear::get_ability;
@@ -8,21 +8,6 @@ use splat_gear::ABILITY_SIZE;
 use splat_gear::PREDICT;
 
 const MAX_DISPLAY: usize = 20;
-
-fn exp(i: Vec<Option<Ability>>, n: usize) -> Vec<Vec<Option<Ability>>> {
-    let mut result = vec![vec![]];
-
-    for _ in 0..n {
-        result = iproduct!(result.iter(), i.iter())
-            .map(|(v, x)| {
-                let mut v = v.clone();
-                v.push(*x);
-                v
-            })
-            .collect();
-    }
-    result
-}
 
 fn search_solution(
     original_seed: u32,
@@ -40,10 +25,12 @@ fn search_solution(
             }
         })
         .collect();
-    let iter = exp(range, PREDICT);
-    for i in iter {
+    let iter = (0..PREDICT)
+        .map(|_| range.clone())
+        .multi_cartesian_product();
+    for drinks in iter {
         let mut abilities: [Ability; PREDICT] = [Ability::MainSave; PREDICT];
-        let drinks: [Option<Ability>; PREDICT] = i[0..PREDICT].try_into().unwrap();
+        let drinks: [Option<Ability>; PREDICT] = drinks[..PREDICT].try_into().unwrap();
         let mut seed = original_seed;
         for j in 0..PREDICT {
             (seed, abilities[j]) = get_ability(seed, brand, drinks[j]);
