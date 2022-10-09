@@ -28,19 +28,19 @@ pub fn advance_seed(mut x: u32) -> u32 {
 }
 
 /// Get the brand ability without drink effect.
-/// 
+///
 /// # Arguments
-/// 
+///
 /// * `seed` - The seed.
 /// * `brand` - The brand.
 /// * `drink` - The drink.
-/// 
+///
 /// # Returns
-/// 
+///
 /// The brand ability.
-/// 
+///
 /// # Examples
-/// 
+///
 /// ```
 /// use splat_gear::ability::Ability;
 /// use splat_gear::brand::Brand;

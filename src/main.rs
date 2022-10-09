@@ -53,11 +53,15 @@ fn search_solution(
 fn main() {
     loop {
         let mut input = String::new();
-        println!("Enter seed: (0x?)");
+        println!(
+            "Enter seed: (0x?)
+输入种子"
+        );
         std::io::stdin().read_line(&mut input).unwrap();
         let seed = u32::from_str_radix(&input.trim_start_matches("0x").trim(), 16).unwrap();
         println!(
-            "Enter brand by number: 
+            "Enter brand by number:
+输入品牌编号 
     0: Amiibo,
     1: Annaki 无法无天,
     2: Barazushi 散寿司,
@@ -84,31 +88,35 @@ fn main() {
         let brand = Brand::from(input.trim().parse::<u8>().unwrap());
         println!(
             "Enter target ability:
-    0: MainSave,
-    1: SubSave,
-    2: InkRecovery,
-    3: RunSpeed,
-    4: SwimSpeed,
-    5: SpecialCharge,
-    6: SpecialSave,
-    7: SpecialPower,
-    8: QuickRespawn,
-    9: SuperJump,
-    10: SubPower,
-    11: InkResistance,
-    12: SubResistance,
-    13: Intensify"
+输入想要的技能
+    0: MainSave 主省,
+    1: SubSave 副省,
+    2: InkRecovery 回墨,
+    3: RunSpeed 走速,
+    4: SwimSpeed 游速,
+    5: SpecialCharge SP增,
+    6: SpecialSave 死亡SP省,
+    7: SpecialPower SP强化,
+    8: QuickRespawn 复活,
+    9: SuperJump 超级跳,
+    10: SubPower 副强,
+    11: InkResistance 安全鞋,
+    12: SubResistance 防爆,
+    13: Intensify 行动强化"
         );
         input.clear();
         std::io::stdin().read_line(&mut input).unwrap();
         let target = Ability::from(input.trim().parse::<usize>().unwrap());
-        println!("Enter lowest standard quality: (ABA,AA,AAA)");
+        println!(
+            "Enter lowest standard quality: (ABA,AA,AAA)
+输入最低标准品质(ABA,AA,AAA)"
+        );
         input.clear();
         std::io::stdin().read_line(&mut input).unwrap();
         let standard = Quality::from(input.trim().to_string());
         let sols = search_solution(seed, brand, target, standard);
         if sols.len() == 0 {
-            println!("No solution found");
+            println!("No solution found in 5 steps. 5步内无合适方案");
         } else {
             let mut count = 0;
             for sol in sols {
@@ -119,7 +127,7 @@ fn main() {
                 }
             }
         }
-        println!("\nContinue? (y/n)");
+        println!("\nContinue? 继续? (y/n)");
         input.clear();
         std::io::stdin().read_line(&mut input).unwrap();
         if input.trim() != "y" {
