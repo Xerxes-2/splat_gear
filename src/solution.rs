@@ -1,5 +1,6 @@
+use super::PREDICT;
 pub struct Solution {
-    drink: [Option<Ability>; 5],
+    drink: [Option<Ability>; PREDICT],
     pub cost: usize,
     pub qual: Quality,
     pub appear: usize,
@@ -44,7 +45,6 @@ impl std::fmt::Display for Solution {
 use itertools::Itertools;
 
 use super::ability::Ability;
-use super::PREDICT;
 impl From<([Option<Ability>; PREDICT], [Ability; PREDICT], Ability)> for Solution {
     fn from(x: ([Option<Ability>; PREDICT], [Ability; PREDICT], Ability)) -> Self {
         let drinks = x.0;

@@ -9,6 +9,21 @@ use splat_gear::PREDICT;
 
 const MAX_DISPLAY: usize = 20;
 
+fn exp(i: Vec<Option<Ability>>, n: usize) -> Vec<Vec<Option<Ability>>> {
+    let mut result = vec![vec![]];
+
+    for _ in 0..n {
+        result = iproduct!(result.iter(), i.iter())
+            .map(|(v, x)| {
+                let mut v = v.clone();
+                v.push(*x);
+                v
+            })
+            .collect();
+    }
+    result
+}
+
 fn search_solution(
     original_seed: u32,
     brand: Brand,
@@ -16,22 +31,19 @@ fn search_solution(
     standard: Quality,
 ) -> Vec<Solution> {
     let mut ret = Vec::new();
-    let range = (0..ABILITY_SIZE + 1).map(|i| {
-        if i == 0 {
-            None
-        } else {
-            Some(Ability::from(i - 1))
-        }
-    });
-    for i in iproduct!(
-        range.clone(),
-        range.clone(),
-        range.clone(),
-        range.clone(),
-        range.clone()
-    ) {
+    let range: Vec<Option<Ability>> = (0..ABILITY_SIZE + 1)
+        .map(|i| {
+            if i == 0 {
+                None
+            } else {
+                Some(Ability::from(i - 1))
+            }
+        })
+        .collect();
+    let iter = exp(range, PREDICT);
+    for i in iter {
         let mut abilities: [Ability; PREDICT] = [Ability::MainSave; PREDICT];
-        let drinks: [Option<Ability>; PREDICT] = [i.0, i.1, i.2, i.3, i.4];
+        let drinks: [Option<Ability>; PREDICT] = i[0..PREDICT].try_into().unwrap();
         let mut seed = original_seed;
         for j in 0..PREDICT {
             (seed, abilities[j]) = get_ability(seed, brand, drinks[j]);
@@ -116,7 +128,10 @@ fn main() {
         let standard = Quality::from(input.trim().to_string());
         let sols = search_solution(seed, brand, target, standard);
         if sols.len() == 0 {
-            println!("No solution found in 5 steps. 5步内无合适方案");
+            println!(
+                "No solution found in {} steps. {}步内无合适方案",
+                PREDICT, PREDICT
+            );
         } else {
             let mut count = 0;
             println!("Quality 品质\tCost 饮料券消耗\tBegin 序列头\tDrinks 饮料顺序");
