@@ -35,7 +35,7 @@ impl std::fmt::Display for Solution {
             .join(", ");
         write!(
             f,
-            "Quality: {:?},\tCost: {}, Appear at: {}, Drink: {}",
+            "Quality: {:?},\tCost: {},  Appear at: {},  Drink: {}",
             self.qual, self.cost, self.appear, drink_seq
         )
     }
